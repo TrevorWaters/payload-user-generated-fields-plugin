@@ -1,0 +1,19 @@
+fieldset {
+  border: none;
+  margin-bottom: var(--spacing-field);
+  margin-inline-end: 0;
+  margin-inline-start: 0;
+  min-inline-size: min-content;
+  padding-block-end: 0;
+  padding-block-start: 0;
+  padding-inline-end: 0;
+  padding-inline-start: 0;
+}
+
+legend {
+  color: var(--theme-elevation-800);
+  display: flex;
+  height: 25px;
+  padding-inline-end: 0;
+  padding-inline-start: 0;
+}

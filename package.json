@@ -1,0 +1,102 @@
+{
+  "name": "payload-user-generated-fields-plugin",
+  "version": "0.1.5",
+  "description": "A plugin for Payload CMS v3 that allows admin users to create custom fields for collections.",
+  "license": "MIT",
+  "type": "module",
+  "homepage": "https://github.com/TrevorWaters/payload-user-generated-fields-plugin",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TrevorWaters/payload-user-generated-fields-plugin.git"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./types": {
+      "import": "./dist/exports/types.js",
+      "types": "./dist/exports/types.d.ts",
+      "default": "./dist/exports/types.js"
+    },
+    "./rsc": {
+      "import": "./dist/exports/rsc.js",
+      "types": "./dist/exports/rsc.d.ts",
+      "default": "./dist/exports/rsc.js"
+    },
+    "./client": {
+      "import": "./dist/exports/client.js",
+      "types": "./dist/exports/client.d.ts",
+      "default": "./dist/exports/client.js"
+    }
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "bun copyfiles && bun run build:types && bun run build:swc",
+    "build:swc": "swc ./src -d ./dist --config-file .swcrc --strip-leading-paths",
+    "build:types": "tsc --outDir dist --rootDir ./src",
+    "clean": "rimraf {dist,*.tsbuildinfo}",
+    "copyfiles": "copyfiles -u 1 \"src/**/*.{html,css,scss,ttf,woff,woff2,eot,svg,jpg,png,json}\" dist/",
+    "dev": "payload run ./dev/server.ts --turbopack",
+    "dev:generate-importmap": "bun dev:payload generate:importmap",
+    "dev:generate-types": "bun dev:payload generate:types",
+    "dev:payload": "cross-env PAYLOAD_CONFIG_PATH=./dev/payload.config.ts payload",
+    "lint": "eslint",
+    "lint:fix": "eslint ./src --fix",
+    "prepublishOnly": "bun clean && bun run build",
+    "test": "jest"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3.3.1",
+    "@payloadcms/db-mongodb": "3.35.1",
+    "@payloadcms/db-postgres": "3.35.1",
+    "@payloadcms/db-sqlite": "3.35.1",
+    "@payloadcms/eslint-config": "3.9.0",
+    "@payloadcms/next": "3.35.1",
+    "@payloadcms/richtext-lexical": "3.35.1",
+    "@swc-node/register": "1.10.9",
+    "@swc/cli": "0.6.0",
+    "@swc/jest": "^0.2.37",
+    "@types/jest": "29.5.12",
+    "@types/node": "^22.14.1",
+    "@types/react": "^19.1.2",
+    "@types/react-dom": "^19.1.2",
+    "copyfiles": "2.4.1",
+    "cross-env": "^7.0.3",
+    "eslint": "^9.25.0",
+    "eslint-config-next": "15.3.1",
+    "graphql": "^16.10.0",
+    "jest": "29.7.0",
+    "mongodb-memory-server": "^10.1.4",
+    "next": "15.3.1",
+    "open": "^10.1.1",
+    "payload": "3.35.1",
+    "prettier": "^3.5.3",
+    "qs-esm": "7.0.2",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "rimraf": "3.0.2",
+    "sharp": "0.33.5",
+    "sort-package-json": "^2.15.1",
+    "typescript": "5.7.3"
+  },
+  "peerDependencies": {
+    "payload": "^3.35.1",
+    "react": "^19",
+    "react-dom": "^19",
+    "@payloadcms/ui": "^3.35.1"
+  },
+  "engines": {
+    "node": "^18.20.2 || >=20.9.0"
+  },
+  "registry": "https://registry.npmjs.org/",
+  "dependencies": {
+    "react-select": "^5.10.1",
+    "swr": "^2.3.3"
+  }
+}
