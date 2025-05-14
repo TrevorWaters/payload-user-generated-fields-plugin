@@ -130,7 +130,7 @@ export const setupValuesCollectionFields = (
           beforeValidate: [
             ...(pluginCollectionConfig.valuesCollection.fieldOverrides?.hooks?.beforeValidate ??
               []),
-            async ({ context, data, operation, originalDoc, req, value }) => {
+            async ({ data, operation, originalDoc, req, value }) => {
               const relationshipId = getRelationshipValue(data, relationshipFieldName)
 
               //Skip this whole thing if the relationship is not set
@@ -174,7 +174,7 @@ export const setupValuesCollectionFields = (
               //This should almost never happen (if someone deleted the Config record at the right time, someone messed with the relationshipId on the client-side)
               if (!configs) {
                 req.payload.logger.error(
-                  'Payload-User-Generated-Fields-Plugin: No configs found during Values collection save.',
+                  'Payload-User-Generated-Fields-Plugin: No configs found during Values collection beforeValidate.',
                 )
                 throw new ValidationError({
                   collection: pluginCollectionConfig.valuesCollection.slug,
@@ -186,12 +186,9 @@ export const setupValuesCollectionFields = (
                   ],
                 })
               }
-              console.log('configs', configs)
 
               //Store config in context for the upcoming hooks
-              context[`configStorage`] = configs
-
-              console.log('context', context)
+              req.context[`configStorage`] = configs
 
               //Remove any values that are not in the config (because the config changed or client-side did something weird)
               const validFieldIds = getFieldIds(configs.configuration)
@@ -207,12 +204,12 @@ export const setupValuesCollectionFields = (
     label: pluginCollectionConfig.valuesCollection.groupName,
     validate: (_, { req, siblingData }: ValidateOptions<any, any, any, any>) => {
       const valuesJSON = siblingData?.[formattedGroupName]?.userGeneratedFieldsValuesJSON
-      console.log('validate context', req.context)
-      const configs: { configuration: FormFieldBlock[] } | undefined = req.context[`configStorage`]
+
+      const configs: { configuration: FormFieldBlock[] } | undefined = req.context?.configStorage
 
       if (!configs) {
         req.payload.logger.error(
-          'Payload-User-Generated-Fields-Plugin: No configs found during Values collection save.',
+          'Payload-User-Generated-Fields-Plugin: No configs found during Values collection validation.',
         )
         return 'Problem saving fields. Please refresh the page and try again.'
       }
