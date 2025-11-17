@@ -375,9 +375,6 @@ const Date: Block = {
         {
           name: 'defaultValue',
           type: 'date',
-          admin: {
-            description: 'use the format YYYY-MM-DD',
-          },
           label: 'Default Value',
         },
       ],
